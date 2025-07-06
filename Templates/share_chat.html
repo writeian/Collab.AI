@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Share Chat{% endblock %}
+{% block content %}
+  <h2>Share "{{ chat.title }}"</h2>
+  
+  <form method="post">
+    <label>
+      Username to share with<br/>
+      <input type="text" name="username" required placeholder="Enter username">
+    </label>
+
+    <label>
+      <input type="checkbox" name="can_edit">
+      Allow this user to edit the chat
+    </label>
+
+    <button type="submit">Share Chat</button>
+  </form>
+  
+  <p><a href="{{ url_for('view_chat', chat_id=chat.id) }}">← Back to Chat</a></p>
+{% endblock %} 

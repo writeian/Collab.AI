@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Create Chat{% endblock %}
+{% block content %}
+  <h2>Start a New Chat</h2>
+  <form method="post">
+    <label>
+      Chat Title<br/>
+      <input type="text" name="title" required>
+    </label>
+
+    <label>
+      <input type="checkbox" name="is_public">
+      Make this chat public (anyone can view)
+    </label>
+
+    <button type="submit">Create ➜</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}All Chats{% endblock %}
+{% block content %}
+  {% if user %}
+    <h2>Welcome, {{ user.display_name }}!</h2>
+    
+    {% if owned_chats %}
+      <h3>Your Chats</h3>
+      <ul>
+        {% for chat in owned_chats %}
+          <li>
+            <a href="{{ url_for('view_chat', chat_id=chat.id) }}">{{ chat.title }}</a>
+            {% if chat.is_public %}<span style="color: #666;">(Public)</span>{% endif %}
+            <small>({{ chat.created_at.strftime('%Y‑%m‑%d %H:%M') }})</small>
+            <form method="post" action="{{ url_for('delete_chat', chat_id=chat.id) }}" style="display: inline; margin-left: 0.5rem;" onsubmit="return confirm('Are you sure you want to delete this chat? This action cannot be undone.')">
+              <button type="submit" style="font-size: 0.8rem;">🗑️</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    
+    {% if shared_chats %}
+      <h3>Shared with You</h3>
+      <ul>
+        {% for chat in shared_chats %}
+          <li>
+            <a href="{{ url_for('view_chat', chat_id=chat.id) }}">{{ chat.title }}</a>
+            — <em>{{ chat.owner.display_name }}</em>
+            <small>({{ chat.created_at.strftime('%Y‑%m‑%d %H:%M') }})</small>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    
+    {% if not owned_chats and not shared_chats %}
+      <p>No chats yet. <a href="{{ url_for('create_chat') }}">Create your first chat!</a></p>
+    {% endif %}
+  {% else %}
+    <h2>Welcome to AI Collab</h2>
+    <p>Join the conversation with AI! <a href="{{ url_for('register') }}">Register</a> or <a href="{{ url_for('login') }}">login</a> to get started.</p>
+  {% endif %}
+  
+  {% if public_chats %}
+    <h3>Public Chats</h3>
+    <ul>
+      {% for chat in public_chats %}
+        <li>
+          <a href="{{ url_for('view_chat', chat_id=chat.id) }}">{{ chat.title }}</a>
+          — <em>{{ chat.owner.display_name }}</em>
+          <small>({{ chat.created_at.strftime('%Y‑%m‑%d %H:%M') }})</small>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
