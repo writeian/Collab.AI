@@ -43,17 +43,8 @@ class Chat(db.Model):
     messages = db.relationship('Message', backref='chat', lazy=True, cascade='all, delete-orphan')
     shares = db.relationship('ChatShare', backref='chat', lazy=True, cascade='all, delete-orphan')
     
-    def can_access(self, user):
-        """Check if a user can access this chat."""
-        if not user:
-            return self.is_public
-        return (user.id == self.owner_id or 
-                self.is_public or 
-                any(share.user_id == user.id for share in self.shares))
-    
-    def can_edit(self, user):
-        """Check if a user can edit this chat."""
-        return user and user.id == self.owner_id
+    # Access control methods moved to access_control.py
+    # Use can_access_chat(user, chat) and can_edit_chat(user, chat) instead
     
     def __repr__(self):
         return f"<Chat {self.id} {self.title!r}>"

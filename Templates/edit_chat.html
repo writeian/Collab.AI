@@ -16,5 +16,5 @@
     <button type="submit">Save Changes</button>
   </form>
   
-  <p><a href="{{ url_for('view_chat', chat_id=chat.id) }}">← Back to Chat</a></p>
+  <p><a href="{{ url_for('chat.view_chat', chat_id=chat.id) }}">← Back to Chat</a></p>
 {% endblock %}

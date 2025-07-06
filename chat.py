@@ -1,7 +1,15 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from models import db, Chat, Message, User, ChatShare
 from openai_utils import get_ai_response
-from auth import login_required, get_current_user
+from access_control import (
+    get_current_user, 
+    require_login, 
+    require_chat_access, 
+    require_chat_edit, 
+    require_chat_owner,
+    can_access_chat,
+    can_edit_chat
+)
 
 chat = Blueprint('chat', __name__)
 
@@ -26,12 +34,9 @@ def index():
                          public_chats=public_chats)
 
 @chat.route("/create", methods=["GET", "POST"])
-@login_required
+@require_login
 def create_chat():
     user = get_current_user()
-    if not user:  # This shouldn't happen due to @login_required, but safety check
-        flash("Please log in to create a chat.")
-        return redirect(url_for("auth.login"))
         
     if request.method == "POST":
         title = request.form["title"].strip()
@@ -49,14 +54,10 @@ def create_chat():
     return render_template("create_chat.html")
 
 @chat.route("/chat/<int:chat_id>", methods=["GET", "POST"])
+@require_chat_access
 def view_chat(chat_id):
     chat_obj = Chat.query.get_or_404(chat_id)
     user = get_current_user()
-    
-    # Check access permissions
-    if not chat_obj.can_access(user):
-        flash("You don't have access to this chat.")
-        return redirect(url_for("chat.index"))
     
     if request.method == "POST":
         if not user:
@@ -81,15 +82,10 @@ def view_chat(chat_id):
     return render_template("view_chat.html", chat=chat_obj, messages=messages, user=user)
 
 @chat.route("/edit/<int:chat_id>", methods=["GET", "POST"])
-@login_required
+@require_chat_edit
 def edit_chat(chat_id):
     chat_obj = Chat.query.get_or_404(chat_id)
-    user = get_current_user()
     
-    if not chat_obj.can_edit(user):
-        flash("You can only edit your own chats.")
-        return redirect(url_for("chat.view_chat", chat_id=chat_obj.id))
-
     if request.method == "POST":
         chat_obj.title = request.form["title"].strip()
         chat_obj.is_public = request.form.get("is_public") == "on"
@@ -100,14 +96,9 @@ def edit_chat(chat_id):
     return render_template("edit_chat.html", chat=chat_obj)
 
 @chat.route("/delete/<int:chat_id>", methods=["POST"])
-@login_required
+@require_chat_owner
 def delete_chat(chat_id):
     chat_obj = Chat.query.get_or_404(chat_id)
-    user = get_current_user()
-    
-    if not chat_obj.can_edit(user):
-        flash("You can only delete your own chats.")
-        return redirect(url_for("chat.view_chat", chat_id=chat_obj.id))
 
     # Delete the chat (messages and shares will be deleted due to cascade)
     db.session.delete(chat_obj)
@@ -116,18 +107,10 @@ def delete_chat(chat_id):
     return redirect(url_for("chat.index"))
 
 @chat.route("/share/<int:chat_id>", methods=["GET", "POST"])
-@login_required
+@require_chat_edit
 def share_chat(chat_id):
     chat_obj = Chat.query.get_or_404(chat_id)
     user = get_current_user()
-    
-    if not user:  # This shouldn't happen due to @login_required, but safety check
-        flash("Please log in to share a chat.")
-        return redirect(url_for("auth.login"))
-    
-    if not chat_obj.can_edit(user):
-        flash("You can only share your own chats.")
-        return redirect(url_for("chat.view_chat", chat_id=chat_obj.id))
 
     if request.method == "POST":
         username = request.form["username"].strip()

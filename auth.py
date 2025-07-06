@@ -1,22 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from models import db, User
-from functools import wraps
+from access_control import get_current_user, require_login
 
 auth = Blueprint('auth', __name__)
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            flash("Please log in to access this page.")
-            return redirect(url_for('auth.login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-def get_current_user():
-    if 'user_id' in session:
-        return User.query.get(session['user_id'])
-    return None
 
 @auth.route("/register", methods=["GET", "POST"])
 def register():
@@ -76,7 +62,7 @@ def logout():
     return redirect(url_for("chat.index"))
 
 @auth.route("/profile")
-@login_required
+@require_login
 def profile():
     user = get_current_user()
     return render_template("profile.html", user=user) 
