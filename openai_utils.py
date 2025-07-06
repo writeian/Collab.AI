@@ -8,7 +8,11 @@ from flask import current_app
 from models import Message
 
 # Initialize OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+api_key = os.getenv("OPENAI_API_KEY")
+if api_key:
+    client = OpenAI(api_key=api_key)
+else:
+    client = None
 
 
 def get_ai_response(
@@ -19,6 +23,9 @@ def get_ai_response(
     max_tokens=300,
 ):
     """Return the assistant's reply text for a given Chat row."""
+    if not client:
+        return "⚠️ OpenAI API key not configured. Please set OPENAI_API_KEY environment variable."
+    
     messages_payload = [
         {"role": m.role, "content": m.content}
         for m in Message.query.filter_by(chat_id=chat.id)

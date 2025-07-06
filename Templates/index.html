@@ -12,9 +12,7 @@
             <a href="{{ url_for('chat.view_chat', chat_id=chat.id) }}">{{ chat.title }}</a>
             {% if chat.is_public %}<span style="color: #666;">(Public)</span>{% endif %}
             <small>({{ chat.created_at.strftime('%Y‑%m‑%d %H:%M') }})</small>
-            <form method="post" action="{{ url_for('chat.delete_chat', chat_id=chat.id) }}" style="display: inline; margin-left: 0.5rem;" onsubmit="return confirm('Are you sure you want to delete this chat? This action cannot be undone.')">
-              <button type="submit" style="font-size: 0.8rem;">🗑️</button>
-            </form>
+            <a href="{{ url_for('chat.delete_chat', chat_id=chat.id) }}" style="text-decoration: none; margin-left: 0.5rem; font-size: 0.8rem;">🗑️</a>
           </li>
         {% endfor %}
       </ul>

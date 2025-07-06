@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Admin - Users{% endblock %}
+{% block content %}
+  <h2>Registered Users</h2>
+  
+  {% if users %}
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #f5f5f5;">
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">ID</th>
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Username</th>
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Email</th>
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Display Name</th>
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Created</th>
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Active</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ user.id }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ user.username }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ user.email }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ user.display_name }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ "Yes" if user.is_active else "No" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No users found.</p>
+  {% endif %}
+  
+  <p style="margin-top: 20px;">
+    <a href="{{ url_for('chat.index') }}">← Back to Home</a>
+  </p>
+{% endblock %} 

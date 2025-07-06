@@ -95,16 +95,19 @@ def edit_chat(chat_id):
     
     return render_template("edit_chat.html", chat=chat_obj)
 
-@chat.route("/delete/<int:chat_id>", methods=["POST"])
+@chat.route("/delete/<int:chat_id>", methods=["GET", "POST"])
 @require_chat_owner
 def delete_chat(chat_id):
     chat_obj = Chat.query.get_or_404(chat_id)
-
-    # Delete the chat (messages and shares will be deleted due to cascade)
-    db.session.delete(chat_obj)
-    db.session.commit()
-    flash("Chat deleted successfully.")
-    return redirect(url_for("chat.index"))
+    
+    if request.method == "POST":
+        # Delete the chat (messages and shares will be deleted due to cascade)
+        db.session.delete(chat_obj)
+        db.session.commit()
+        flash("Chat deleted successfully.")
+        return redirect(url_for("chat.index"))
+    
+    return render_template("delete_chat.html", chat=chat_obj)
 
 @chat.route("/share/<int:chat_id>", methods=["GET", "POST"])
 @require_chat_edit
