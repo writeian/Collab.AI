@@ -1,0 +1,133 @@
+ /* ---------------------------------------------------------
+   AI Collab – minimal, readable light‑theme stylesheet
+   Drop this in static/style.css; base.html already links to it.
+   Feel free to tweak colors or add a dark theme later.
+----------------------------------------------------------*/
+
+/* Global reset / base typography */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: #f7f7f7;
+  color: #222;
+  line-height: 1.5;
+}
+
+h1,
+h2 {
+  margin-top: 0;
+  font-weight: 600;
+}
+
+/* Page wrapper */
+.container {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Navigation */
+nav {
+  margin-bottom: 1rem;
+}
+nav a {
+  margin-right: 1rem;
+  text-decoration: none;
+  color: #0660d4;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Flash messages */
+.flash {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  color: #d40000;
+}
+
+/* Chat window */
+.chat-window {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+.user {
+  margin-bottom: 0.75rem;
+  color: #0645ad;
+}
+.assistant {
+  margin-bottom: 0.75rem;
+  color: #0a7a0a;
+}
+
+/* Forms */
+form input[type="text"],
+form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+button {
+  background: #0660d4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+button:hover {
+  background: #054ea8;
+}
+
+/* Delete button styling */
+button[type="submit"] {
+  background: #0660d4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background: #054ea8;
+}
+
+/* Delete button specific styling */
+form[action*="delete"] button[type="submit"] {
+  background: #d40000;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+form[action*="delete"] button[type="submit"]:hover {
+  background: #b30000;
+}
+
+/* Small delete button for index page */
+form[action*="delete"] button[type="submit"][style*="font-size: 0.8rem"] {
+  background: #d40000;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
+}
+
+form[action*="delete"] button[type="submit"][style*="font-size: 0.8rem"]:hover {
+  background: #b30000;
+}
+
+/* Utility */
+small {
+  color: #666;
+}
+   

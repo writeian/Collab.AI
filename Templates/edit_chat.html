@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Edit Chat{% endblock %}
+{% block content %}
+  <h2>Edit Chat</h2>
+  <form method="post">
+    <label>
+      Chat Title<br/>
+      <input type="text" name="title" value="{{ chat.title }}" required />
+    </label>
+
+    <label>
+      <input type="checkbox" name="is_public" {% if chat.is_public %}checked{% endif %}>
+      Make this chat public (anyone can view)
+    </label>
+
+    <button type="submit">Save Changes</button>
+  </form>
+  
+  <p><a href="{{ url_for('view_chat', chat_id=chat.id) }}">← Back to Chat</a></p>
+{% endblock %}

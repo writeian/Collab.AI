@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ chat.title }}{% endblock %}
+{% block content %}
+  <h2>{{ chat.title }}</h2>
+  <p><em>Created by: {{ chat.owner.display_name }}</em></p>
+  {% if chat.is_public %}<p><span style="color: #666;">(Public Chat)</span></p>{% endif %}
+
+  <div class="chat-window">
+    {% for m in messages %}
+      <div class="{{ m.role }}">
+        <strong>
+          {% if m.role == 'user' %}
+            {{ m.user.display_name if m.user else 'Anonymous' }}:
+          {% else %}
+            AI Assistant:
+          {% endif %}
+        </strong>
+        <pre style="white-space: pre-wrap; margin: 0; font-family: inherit;">{{ m.content }}</pre>
+      </div>
+    {% endfor %}
+  </div>
+
+  <hr/>
+  {% if user %}
+    <form method="post">
+      <textarea name="content" rows="4" required placeholder="Type your message..."></textarea>
+      <button type="submit">Send</button>
+    </form>
+  {% else %}
+    <p><em>Please <a href="{{ url_for('login') }}">login</a> to send messages.</em></p>
+  {% endif %}
+
+  {% if user and chat.can_edit(user) %}
+    <p>
+      <a href="{{ url_for('edit_chat', chat_id=chat.id) }}">✏️ Edit Chat</a>
+      <a href="{{ url_for('share_chat', chat_id=chat.id) }}">🔗 Share Chat</a>
+      <form method="post" action="{{ url_for('delete_chat', chat_id=chat.id) }}" style="display: inline; margin-left: 1rem;" onsubmit="return confirm('Are you sure you want to delete this chat? This action cannot be undone.')">
+        <button type="submit">🗑️ Delete Chat</button>
+      </form>
+    </p>
+  {% endif %}
+{% endblock %}
