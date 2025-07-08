@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 # Import Blueprints
 from auth import auth
 from chat import chat
+from dashboard import dashboard
+from google_auth import google_auth
 
 # Load environment variables from .env file
 load_dotenv()
@@ -30,6 +32,8 @@ def create_app():
     # Register Blueprints
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(chat, url_prefix='/chat')
+    app.register_blueprint(dashboard, url_prefix='/dashboard')
+    app.register_blueprint(google_auth, url_prefix='/auth/google')
     
     # Redirect root to chat index
     @app.route('/')

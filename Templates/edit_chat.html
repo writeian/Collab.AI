@@ -9,6 +9,15 @@
     </label>
 
     <label>
+      Writing Stage<br/>
+      <select name="mode" required>
+        {% for mode_key, mode_data in modes.items() %}
+          <option value="{{ mode_key }}" {% if chat.mode == mode_key %}selected{% endif %}>{{ mode_data.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>
       <input type="checkbox" name="is_public" {% if chat.is_public %}checked{% endif %}>
       Make this chat public (anyone can view)
     </label>

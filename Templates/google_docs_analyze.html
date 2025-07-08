@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Analyze Google Doc{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Analyze Google Doc</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Document Analysis</h5>
+            <p class="card-text">
+                Share your Google Doc with AI Collab and get intelligent feedback on your writing.
+                The AI will analyze your document and provide suggestions based on the selected mode.
+            </p>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label for="doc_url">Google Docs URL:</label>
+                    <input type="url" class="form-control" id="doc_url" name="doc_url" 
+                           placeholder="https://docs.google.com/document/d/..." required>
+                    <small class="form-text text-muted">
+                        Paste the sharing link to your Google Doc. Make sure it's shared with the service account.
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mode">Analysis Mode:</label>
+                    <select class="form-control" id="mode" name="mode">
+                        {% for mode_key, mode_data in modes.items() %}
+                        <option value="{{ mode_key }}" {% if mode_key == 'revise' %}selected{% endif %}>
+                            {{ mode_data.label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <small class="form-text text-muted">
+                        Choose how you want the AI to analyze your document.
+                    </small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Analyze Document</button>
+                <a href="{{ url_for('chat.index') }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">How to Share Your Document</h5>
+            <ol>
+                <li>Open your Google Doc</li>
+                <li>Click the "Share" button in the top right</li>
+                <li>Add the service account email: <code>ai-collab@your-project.iam.gserviceaccount.com</code></li>
+                <li>Set permissions to "Viewer" or "Commenter"</li>
+                <li>Copy the sharing link and paste it above</li>
+            </ol>
+        </div>
+    </div>
+</div>
+{% endblock %} 

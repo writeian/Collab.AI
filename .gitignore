@@ -45,4 +45,8 @@ instance/
 Thumbs.db
 
 # Logs
-*.log 
+*.log
+
+# Google Service Account
+service-account-key.json
+*.json 

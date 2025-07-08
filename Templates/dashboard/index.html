@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI Collab{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Instructor Dashboard</h1>
+    
+    <!-- Mode Usage Statistics -->
+    <div class="dashboard-section">
+        <h2>Mode Usage Statistics</h2>
+        <div class="stats-grid">
+            {% for mode, count in mode_counts.items() %}
+            <div class="stat-card">
+                <h3>{{ mode|title }}</h3>
+                <div class="stat-number">{{ count }}</div>
+                <div class="stat-label">prompts</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- User Statistics -->
+    <div class="dashboard-section">
+        <h2>Student Activity</h2>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Total Prompts</th>
+                        <th>Last Activity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_id, display_name, prompt_count in user_stats %}
+                    <tr>
+                        <td>{{ display_name }}</td>
+                        <td>{{ prompt_count }}</td>
+                        <td>
+                            {% set last_prompt = prompt_records|selectattr('user_id', 'equalto', user_id)|first %}
+                            {% if last_prompt %}
+                                {{ last_prompt.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                            {% else %}
+                                Never
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Prompts -->
+    <div class="dashboard-section">
+        <h2>Recent Prompts</h2>
+        <div class="prompts-list">
+            {% for prompt in recent_prompts %}
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <span class="prompt-mode">{{ prompt.mode|title }}</span>
+                    <span class="prompt-user">{{ prompt.user.display_name }}</span>
+                    <span class="prompt-time">{{ prompt.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+                </div>
+                <div class="prompt-content">
+                    {{ prompt.prompt_content[:200] }}{% if prompt.prompt_content|length > 200 %}...{% endif %}
+                </div>
+                <div class="prompt-chat">
+                    Chat: {{ prompt.chat.title }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="dashboard-actions">
+        <a href="{{ url_for('dashboard.view_prompts') }}" class="btn btn-primary">View All Prompts</a>
+        <a href="{{ url_for('chat.index') }}" class="btn btn-secondary">Back to Chats</a>
+    </div>
+</div>
+{% endblock %} 

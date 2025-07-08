@@ -10,6 +10,13 @@
         {% for chat in owned_chats %}
           <li>
             <a href="{{ url_for('chat.view_chat', chat_id=chat.id) }}">{{ chat.title }}</a>
+            <span style="color: #666; font-size: 0.9em;">
+              {% if chat.mode in modes %}
+                {{ modes[chat.mode].label }}
+              {% else %}
+                {{ chat.mode }}
+              {% endif %}
+            </span>
             {% if chat.is_public %}<span style="color: #666;">(Public)</span>{% endif %}
             <small>({{ chat.created_at.strftime('%Y‑%m‑%d %H:%M') }})</small>
             <a href="{{ url_for('chat.delete_chat', chat_id=chat.id) }}" style="text-decoration: none; margin-left: 0.5rem; font-size: 0.8rem;">🗑️</a>
@@ -24,6 +31,13 @@
         {% for chat in shared_chats %}
           <li>
             <a href="{{ url_for('chat.view_chat', chat_id=chat.id) }}">{{ chat.title }}</a>
+            <span style="color: #666; font-size: 0.9em;">
+              {% if chat.mode in modes %}
+                {{ modes[chat.mode].label }}
+              {% else %}
+                {{ chat.mode }}
+              {% endif %}
+            </span>
             — <em>{{ chat.owner.display_name }}</em>
             <small>({{ chat.created_at.strftime('%Y‑%m‑%d %H:%M') }})</small>
           </li>
@@ -45,6 +59,13 @@
       {% for chat in public_chats %}
         <li>
           <a href="{{ url_for('chat.view_chat', chat_id=chat.id) }}">{{ chat.title }}</a>
+          <span style="color: #666; font-size: 0.9em;">
+            {% if chat.mode in modes %}
+              {{ modes[chat.mode].label }}
+            {% else %}
+              {{ chat.mode }}
+            {% endif %}
+          </span>
           — <em>{{ chat.owner.display_name }}</em>
           <small>({{ chat.created_at.strftime('%Y‑%m‑%d %H:%M') }})</small>
         </li>

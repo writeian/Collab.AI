@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}All Prompts - Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>All Student Prompts</h1>
+    
+    <!-- Filters -->
+    <div class="filters-section">
+        <form method="GET" class="filters-form">
+            <div class="filter-group">
+                <label for="mode">Filter by Mode:</label>
+                <select name="mode" id="mode">
+                    <option value="">All Modes</option>
+                    {% for mode in modes %}
+                    <option value="{{ mode[0] }}" {% if current_mode == mode[0] %}selected{% endif %}>
+                        {{ mode[0]|title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="user">Filter by Student:</label>
+                <select name="user" id="user">
+                    <option value="">All Students</option>
+                    {% for username, display_name in users %}
+                    <option value="{{ username }}" {% if current_user == username %}selected{% endif %}>
+                        {{ display_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <a href="{{ url_for('dashboard.view_prompts') }}" class="btn btn-secondary">Clear Filters</a>
+        </form>
+    </div>
+
+    <!-- Prompts List -->
+    <div class="prompts-container">
+        {% if prompts %}
+            <div class="prompts-list">
+                {% for prompt in prompts %}
+                <div class="prompt-card">
+                    <div class="prompt-header">
+                        <span class="prompt-mode">{{ prompt.mode|title }}</span>
+                        <span class="prompt-user">{{ prompt.user.display_name }}</span>
+                        <span class="prompt-time">{{ prompt.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                    <div class="prompt-content">
+                        {{ prompt.prompt_content }}
+                    </div>
+                    <div class="prompt-meta">
+                        <span class="prompt-chat">Chat: {{ prompt.chat.title }}</span>
+                        <span class="prompt-length">{{ prompt.prompt_content|length }} characters</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <p>No prompts found matching the current filters.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Navigation -->
+    <div class="dashboard-actions">
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="{{ url_for('chat.index') }}" class="btn btn-secondary">Back to Chats</a>
+    </div>
+</div>
+{% endblock %} 

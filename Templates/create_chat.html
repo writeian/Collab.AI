@@ -9,6 +9,21 @@
     </label>
 
     <label>
+      Writing Stage<br/>
+      <select name="mode" required>
+        {% for mode_key, mode_data in modes.items() %}
+          <option value="{{ mode_key }}">{{ mode_data.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>
+      Google Doc URL (Optional)<br/>
+      <input type="url" name="google_doc_url" placeholder="https://docs.google.com/document/d/...">
+      <small>Paste your Google Doc sharing link to import the content into this chat</small>
+    </label>
+
+    <label>
       <input type="checkbox" name="is_public">
       Make this chat public (anyone can view)
     </label>

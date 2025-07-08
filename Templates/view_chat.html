@@ -3,6 +3,16 @@
 {% block content %}
   <h2>{{ chat.title }}</h2>
   <p><em>Created by: {{ chat.owner.display_name }}</em></p>
+  <p>
+    <strong>Writing Stage:</strong>
+    <span style="color: #666;">
+      {% if chat.mode in modes %}
+        {{ modes[chat.mode].label }}
+      {% else %}
+        {{ chat.mode }}
+      {% endif %}
+    </span>
+  </p>
   {% if chat.is_public %}<p><span style="color: #666;">(Public Chat)</span></p>{% endif %}
 
   <div class="chat-window">
