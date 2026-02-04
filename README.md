@@ -68,7 +68,7 @@ A modern, multi-user AI chat application built with Flask, SQLAlchemy, and OpenA
    ```
 
 5. **Set up Google Docs Integration (Optional)**
-   - Follow the setup guide in `GOOGLE_DOCS_SETUP.md`
+   - Follow the setup guide in [`GOOGLE_DOCS_SETUP.md`](./GOOGLE_DOCS_SETUP.md)
    - Place your service account key file as `service-account-key.json`
 
 6. **Run the application**
@@ -137,7 +137,7 @@ For Google Docs functionality:
 4. Download the JSON key file
 5. Share documents with the service account email
 
-See `GOOGLE_DOCS_SETUP.md` for detailed instructions.
+See [`GOOGLE_DOCS_SETUP.md`](./GOOGLE_DOCS_SETUP.md) for detailed instructions.
 
 ## 🎯 Usage
 
